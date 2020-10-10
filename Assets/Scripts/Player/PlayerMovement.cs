@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Mirror;
+using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : NetworkBehaviour {
     [SerializeField] private CharacterController controller;
     [SerializeField] private float movementSpeed = 10f;
     [SerializeField] private float gravity = -9.81f;
@@ -13,6 +14,10 @@ public class PlayerMovement : MonoBehaviour {
     private Vector3 velocity = Vector3.zero;
     private bool isGrounded = true;
     private void Update () {
+        if (!isLocalPlayer) {
+            return;
+        }
+
         isGrounded = Physics.CheckSphere (groundCheckSphere.position, maxGroundDistance, groundLayerMask);
         if (isGrounded && velocity.y < 0) {
             velocity.y = -2f;
