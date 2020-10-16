@@ -1,2 +1,3 @@
 [x] CameraLook
-[ ] 2x Camera Bug
+[x] 2x Camera Bug
+[ ] Minispiel Instanzen hinzufügen

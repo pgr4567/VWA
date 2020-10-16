@@ -4,9 +4,19 @@ using UnityEngine;
 public class CameraLook : NetworkBehaviour {
     [SerializeField] private float maxXRotation = 80f;
     [SerializeField] private float lookSpeed = 10f;
-    [SerializeField] private new Transform camera;
+    [SerializeField] private GameObject cameraPrefab;
+    private new Transform camera;
 
     private Vector3 rotation = Vector3.zero;
+
+    private void Start () {
+        if (isLocalPlayer) {
+            camera = Instantiate (cameraPrefab, new Vector3 (0, 0.5f, 0), Quaternion.identity, transform).transform;
+            gameObject.name = "LocalPlayer";
+        } else {
+            gameObject.name = "RemotePlayer";
+        }
+    }
     private void Update () {
         if (!isLocalPlayer) {
             return;
