@@ -1,6 +1,9 @@
 ﻿{
     "files.exclude":
     {
+        "**/Builds/":true,
+        "**/UserSettings/":true,
+        "**/Assets/Mirror/Examples":true,
         "**/.DS_Store":true,
         "**/.git":true,
         "**/.gitignore":true,

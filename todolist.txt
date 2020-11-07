@@ -1,3 +1,9 @@
 [x] CameraLook
 [x] 2x Camera Bug
 [ ] Minispiel Instanzen hinzufügen
+[ ] Session Tokens
+[ ] Redo Menus
+[x] Make Option to disable Password Saving
+[x] Register Menu
+[ ] Re-Try Login if failed, after n times return to main menu
+[ ] Result Screen for Login

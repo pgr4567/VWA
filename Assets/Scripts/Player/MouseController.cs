@@ -5,7 +5,7 @@ public class MouseController : MonoBehaviour {
     private void Awake () {
         if (instance != null) {
             Debug.LogWarning ("There must only be one MouseController in the scene.");
-            Destroy (gameObject);
+            Destroy (this);
         }
         instance = this;
     }

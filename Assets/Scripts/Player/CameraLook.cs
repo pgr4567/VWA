@@ -5,8 +5,8 @@ public class CameraLook : NetworkBehaviour {
     [SerializeField] private float maxXRotation = 80f;
     [SerializeField] private float lookSpeed = 10f;
     [SerializeField] private GameObject cameraPrefab;
+    
     private new Transform camera;
-
     private Vector3 rotation = Vector3.zero;
 
     private void Start () {

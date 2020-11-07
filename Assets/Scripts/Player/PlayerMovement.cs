@@ -13,6 +13,7 @@ public class PlayerMovement : NetworkBehaviour {
     private Vector2 input = Vector2.zero;
     private Vector3 velocity = Vector3.zero;
     private bool isGrounded = true;
+
     private void Update () {
         if (!isLocalPlayer) {
             return;
