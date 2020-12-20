@@ -1,9 +1,14 @@
 [x] CameraLook
 [x] 2x Camera Bug
 [ ] Minispiel Instanzen hinzufügen
+[x] OnQuitGame -> Aus Minigame leaven
+[ ] Wenn host verlässt, neuen host finden.
+[x] Lock login button after first klick
 [ ] Session Tokens
 [ ] Redo Menus
 [x] Make Option to disable Password Saving
 [x] Register Menu
 [ ] Re-Try Login if failed, after n times return to main menu
 [ ] Result Screen for Login
+[ ] Change Player Settings->Stacktrace back to <Script Only>
+[ ] Pant and Melonhouse Easter Egg

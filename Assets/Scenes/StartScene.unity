@@ -1634,8 +1634,8 @@ GameObject:
   m_Component:
   - component: {fileID: 544744847}
   - component: {fileID: 544744849}
-  - component: {fileID: 544744848}
   - component: {fileID: 544744851}
+  - component: {fileID: 544744850}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -1657,7 +1657,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &544744848
+--- !u!114 &544744849
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1666,7 +1666,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 544744846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
+  m_Script: {fileID: 11500000, guid: c7ce40c26b600d44f8ebdd10a6f8a548, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
+  runInBackground: 1
+  autoStartServerBuild: 1
+  showDebugMessages: 0
+  serverTickRate: 30
+  offlineScene: Assets/Scenes/OfflineScene.unity
+  onlineScene: Assets/Scenes/GameScene.unity
+  transport: {fileID: 544744850}
+  networkAddress: 217.160.213.47
+  maxConnections: 4
+  disconnectInactiveConnections: 0
+  disconnectInactiveTimeout: 60
+  authenticator: {fileID: 544744851}
+  playerPrefab: {fileID: 0}
+  autoCreatePlayer: 0
+  playerSpawnMethod: 0
+  spawnPrefabs:
+  - {fileID: 6831643975665630446, guid: cc547ba61e2dd8b46bcf7f17c57d387a, type: 3}
+  - {fileID: 1868058969274317841, guid: e0680ccc9340bb247a143da1311eca07, type: 3}
+  localPlayer: {fileID: 6831643975665630446, guid: cc547ba61e2dd8b46bcf7f17c57d387a, type: 3}
+  remotePlayer: {fileID: 1868058969274317841, guid: e0680ccc9340bb247a143da1311eca07, type: 3}
+--- !u!114 &544744850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544744846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   OnClientConnected:
@@ -1693,41 +1726,14 @@ MonoBehaviour:
   OnServerDisconnected:
     m_PersistentCalls:
       m_Calls: []
-  port: 7777
+  Port: 7777
   NoDelay: 1
-  serverMaxMessageSize: 16384
-  serverMaxReceivesPerTick: 10000
-  clientMaxMessageSize: 16384
-  clientMaxReceivesPerTick: 1000
---- !u!114 &544744849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 544744846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7ce40c26b600d44f8ebdd10a6f8a548, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
-  runInBackground: 1
-  autoStartServerBuild: 1
-  showDebugMessages: 0
-  serverTickRate: 30
-  offlineScene: Assets/Scenes/OfflineScene.unity
-  onlineScene: Assets/Scenes/GameScene.unity
-  transport: {fileID: 544744848}
-  networkAddress: localhost
-  maxConnections: 4
-  disconnectInactiveConnections: 0
-  disconnectInactiveTimeout: 60
-  authenticator: {fileID: 544744851}
-  playerPrefab: {fileID: 1868058969274317841, guid: e0680ccc9340bb247a143da1311eca07, type: 3}
-  autoCreatePlayer: 1
-  playerSpawnMethod: 0
-  spawnPrefabs: []
+  Interval: 10
+  FastResend: 0
+  CongestionWindow: 1
+  SendWindowSize: 128
+  ReceiveWindowSize: 128
+  debugGUI: 1
 --- !u!114 &544744851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1742,19 +1748,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnServerAuthenticated:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 544744849}
-        m_TargetAssemblyTypeName: MainNetworkManager, Assembly-CSharp
-        m_MethodName: AddPlayerToDictionary
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnClientAuthenticated:
     m_PersistentCalls:
       m_Calls: []
@@ -3656,7 +3650,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 954705977}
         m_TargetAssemblyTypeName: LoginMenu, Assembly-CSharp
-        m_MethodName: StartHost
+        m_MethodName: StartServer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

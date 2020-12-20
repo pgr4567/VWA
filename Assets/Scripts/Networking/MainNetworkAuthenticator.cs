@@ -11,29 +11,13 @@ using UnityEngine;
 public class MainNetworkAuthenticator : NetworkAuthenticator {
     #region Messages
 
-    public class AuthRequestMessage : MessageBase {
-        public string username { get; set; }
-        public string password { get; set; }
-
-        public override void Serialize (NetworkWriter writer) {
-            writer.WriteString (username);
-            writer.WriteString (password);
-        }
-        public override void Deserialize (NetworkReader reader) {
-            username = reader.ReadString ();
-            password = reader.ReadString ();
-        }
+    public struct AuthRequestMessage : NetworkMessage {
+        public string username;
+        public string password;
     }
 
-    public class AuthResponseMessage : MessageBase {
-        public bool authenticated { get; set; }
-
-        public override void Serialize (NetworkWriter writer) {
-            writer.WriteBoolean (authenticated);
-        }
-        public override void Deserialize (NetworkReader reader) {
-            authenticated = reader.ReadBoolean ();
-        }
+    public struct AuthResponseMessage : NetworkMessage {
+        public bool authenticated;
     }
 
     #endregion
@@ -99,8 +83,8 @@ public class MainNetworkAuthenticator : NetworkAuthenticator {
     /// </summary>
     /// <param name="conn">Connection of the client.</param>
     public override void OnClientAuthenticate (NetworkConnection conn) {
-        string username = PlayerPrefs.GetString("username");
-        string password = PlayerPrefs.GetString("password");
+        string username = PlayerPrefs.GetString ("username");
+        string password = PlayerPrefs.GetString ("password");
         AuthRequestMessage authRequestMessage = new AuthRequestMessage () { username = username, password = password };
 
         conn.Send (authRequestMessage);

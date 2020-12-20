@@ -15,7 +15,7 @@ public class PlayerMovement : NetworkBehaviour {
     private bool isGrounded = true;
 
     private void Update () {
-        if (!isLocalPlayer) {
+        if (!isLocalPlayer || GameManager.instance.isInLobby) {
             return;
         }
 

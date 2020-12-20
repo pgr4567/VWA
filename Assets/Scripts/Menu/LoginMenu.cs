@@ -8,9 +8,15 @@ public class LoginMenu : MonoBehaviour {
     [SerializeField] private TMP_InputField password;
     [SerializeField] private Toggle passwordToggle;
     [SerializeField] private GameObject registerCanvas;
+    private bool starting = false;
 
     private void OnEnable () {
         LoadCredentials ();
+#if UNITY_STANDALONE_LINUX
+        if (!Application.isEditor) {
+            StartServer ();
+        }
+#endif
     }
 
     private void SaveCredentials () {
@@ -29,11 +35,14 @@ public class LoginMenu : MonoBehaviour {
         passwordToggle.isOn = PlayerPrefs.GetInt ("passwordToggle") == 1 ? true : false;
     }
 
-    public void StartHost () {
-        SaveCredentials ();
-        networkManager.StartHost ();
+    public void StartServer () {
+        networkManager.StartServer ();
     }
     public void StartClient () {
+        if (starting) {
+            return;
+        }
+        starting = true;
         SaveCredentials ();
         networkManager.StartClient ();
     }
