@@ -160,7 +160,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxXRotation: 80
-  lookSpeed: 10
+  lookSpeed: 5
   cameraPrefab: {fileID: 2491335384803998279, guid: d27beed2337737f41ac8e6ee0ea75d4f, type: 3}
 --- !u!114 &2178889743159422795
 MonoBehaviour:

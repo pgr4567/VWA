@@ -1,7 +1,8 @@
 using Mirror;
 
-public struct JoinMinigameMessage : NetworkMessage {
-    public string username;
-    public string gameID;
-    public string name;
+namespace Minigames {
+    public struct JoinMinigameMessage : NetworkMessage {
+        public string username;
+        public string gameID;
+    }
 }

@@ -1,21 +1,31 @@
-﻿using UnityEngine;
+﻿using General;
+using UnityEngine;
 
-public class MouseController : MonoBehaviour {
-    public static MouseController instance;
-    private void Awake () {
-        if (instance != null) {
-            Debug.LogWarning ("There must only be one MouseController in the scene.");
-            Destroy (this);
+namespace Player {
+    public class MouseController : MonoBehaviour {
+        public static MouseController instance;
+
+        private void Awake () {
+            if (instance != null) {
+                Debug.LogWarning ("There must only be one MouseController in the scene.");
+                Destroy (this);
+            }
+
+            instance = this;
         }
-        instance = this;
-    }
-    private void Start () {
-        HideCursor ();
-    }
-    public void ShowCursor () {
-        Cursor.lockState = CursorLockMode.None;
-    }
-    public void HideCursor () {
-        Cursor.lockState = CursorLockMode.Locked;
+
+        private void Start () { HideCursor (); }
+
+        private void Update () {
+            if (Input.GetKeyDown (KeyCode.Escape)) {
+                ShowCursor ();
+            } else if (Input.GetKeyUp (KeyCode.Escape) && !GameManager.instance.isInLobby) {
+                HideCursor ();
+            }
+        }
+
+        public void ShowCursor () { Cursor.lockState = CursorLockMode.None; }
+
+        public void HideCursor () { Cursor.lockState = CursorLockMode.Locked; }
     }
 }

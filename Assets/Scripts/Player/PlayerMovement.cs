@@ -1,42 +1,45 @@
-﻿using Mirror;
+﻿using General;
+using Mirror;
 using UnityEngine;
 
-public class PlayerMovement : NetworkBehaviour {
-    [SerializeField] private CharacterController controller;
-    [SerializeField] private float movementSpeed = 10f;
-    [SerializeField] private float gravity = -9.81f;
-    [SerializeField] private Transform groundCheckSphere;
-    [SerializeField] private float maxGroundDistance = 0.1f;
-    [SerializeField] private LayerMask groundLayerMask;
-    [SerializeField] private float jumpHeight = 2f;
+namespace Player {
+    public class PlayerMovement : NetworkBehaviour {
+        [SerializeField] private CharacterController controller;
+        [SerializeField] private float movementSpeed = 10f;
+        [SerializeField] private float gravity = -9.81f;
+        [SerializeField] private Transform groundCheckSphere;
+        [SerializeField] private float maxGroundDistance = 0.1f;
+        [SerializeField] private LayerMask groundLayerMask;
+        [SerializeField] private float jumpHeight = 2f;
 
-    private Vector2 input = Vector2.zero;
-    private Vector3 velocity = Vector3.zero;
-    private bool isGrounded = true;
+        private Vector2 _input = Vector2.zero;
+        private bool _isGrounded = true;
+        private Vector3 _velocity = Vector3.zero;
 
-    private void Update () {
-        if (!isLocalPlayer || GameManager.instance.isInLobby) {
-            return;
+        private void Update () {
+            if (!isLocalPlayer || GameManager.instance.isInLobby) {
+                return;
+            }
+
+            _isGrounded = Physics.CheckSphere (groundCheckSphere.position, maxGroundDistance, groundLayerMask);
+            if (_isGrounded && _velocity.y < 0) {
+                _velocity.y = -2f;
+            }
+
+            //TODO: Neues Input-System? Mobile-Client funktioniert so nicht.
+            _input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
+
+            Vector3 move = transform.right * _input.x + transform.forward * _input.y;
+            move.Normalize ();
+            move *= movementSpeed;
+
+            //TODO: Neues Input-System? Mobile-Client funktioniert so nicht.
+            if (_isGrounded && Input.GetButtonDown ("Jump")) {
+                _velocity.y += Mathf.Sqrt (-2f * gravity * jumpHeight);
+            }
+
+            _velocity.y += gravity * Time.deltaTime;
+            controller.Move ((move + _velocity) * Time.deltaTime);
         }
-
-        isGrounded = Physics.CheckSphere (groundCheckSphere.position, maxGroundDistance, groundLayerMask);
-        if (isGrounded && velocity.y < 0) {
-            velocity.y = -2f;
-        }
-
-        //TODO: Neues Input-System? Mobile-Client funktioniert so nicht.
-        input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
-
-        Vector3 move = transform.right * input.x + transform.forward * input.y;
-        move.Normalize ();
-        move *= movementSpeed;
-
-        //TODO: Neues Input-System? Mobile-Client funktioniert so nicht.
-        if (isGrounded && Input.GetButtonDown ("Jump")) {
-            velocity.y += Mathf.Sqrt (-2f * gravity * jumpHeight);
-        }
-
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move ((move + velocity) * Time.deltaTime);
     }
 }

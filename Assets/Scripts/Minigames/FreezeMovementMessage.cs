@@ -1,5 +1,7 @@
 using Mirror;
 
-public struct FreezeMovementMessage : NetworkMessage {
-    public bool freeze;
+namespace Minigames {
+    public struct FreezeMovementMessage : NetworkMessage {
+        public bool freeze;
+    }
 }
