@@ -1,8 +1,8 @@
 [x] CameraLook
 [x] 2x Camera Bug
-[ ] Minispiel Instanzen hinzufügen
+[x] Minispiel Instanzen hinzufügen
 [x] OnQuitGame -> Aus Minigame leaven
-[ ] Wenn host verlässt, neuen host finden.
+[x] Wenn host verlässt, neuen host finden.
 [x] Lock login button after first klick
 [ ] Session Tokens
 [ ] Redo Menus
@@ -10,5 +10,17 @@
 [x] Register Menu
 [ ] Re-Try Login if failed, after n times return to main menu
 [ ] Result Screen for Login
-[ ] Change Player Settings->Stacktrace back to <Script Only>
+[x] Change Player Settings->Stacktrace back to <Script Only>
 [ ] Pant and Melonhouse Easter Egg
+[x] FinishGameCanvas
+[ ] Additional Info in FinishGameCanvas
+[x] delete "" user and "" password
+[ ] why is cursor locked when in FinishGameCanvas?
+[x] prevent "" user and "" password, maybe add minimum length
+[ ] authentication server add authentication for server.
+[x] chat
+[ ] HUD with money
+[ ] shop
+[ ] get money
+[ ] items
+[ ] forbid joining with the same version

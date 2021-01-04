@@ -109,8 +109,8 @@ namespace Minigames {
                 if (lobbyOwner == username) {
                     lobbyOwner = players.First ();
                     if (!isRunning) {
-                        Debug.Log ("TRYING TO CHANGE");
-                        GameManager.instance.TargetUpdateIsOwner (MainNetworkManager.instance.players[username], true);
+                        GameManager.instance.TargetUpdateIsOwner (MainNetworkManager.instance.players[lobbyOwner],
+                            true);
                     }
                 }
 
@@ -186,10 +186,23 @@ namespace Minigames {
                 new MirrorRemoveMinigameInstanceMessage { worldID = number, gameID = gameID, name = minigame.name });
         }
 
+        private void ShowEndScreen (MinigameTeam teamWon) {
+            foreach (string player in players) {
+                GameManager.instance.TargetShowFinishGameCanvas (MainNetworkManager.instance.players[player], minigame,
+                    teamWon);
+            }
+        }
+
         public void ScoreTeam (int points, int color) {
             if (GameManager.instance.isServer) {
                 teams[color].points += points;
             }
+        }
+
+        protected void FinishGame (MinigameTeam teamWon) {
+            isRunning = false;
+            ShowEndScreen (teamWon);
+            MinigameDispatcher.instance.RemoveMinigameLobby (minigame.name, number, gameID);
         }
 
         protected abstract void GameLoopServer ();

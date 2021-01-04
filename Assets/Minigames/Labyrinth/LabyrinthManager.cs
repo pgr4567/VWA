@@ -26,10 +26,7 @@ namespace Minigames.Labyrinth {
         protected override void GameLoopServer () {
             _current = Time.time - _time;
             if (teams.Values.Count (team => team.points >= minigame.winningPoints) > 0) {
-                isRunning = false;
-                Debug.Log ($"NICE! That took {_current}s.");
-
-                MinigameDispatcher.instance.RemoveMinigameLobby (minigame.name, number, gameID);
+                FinishGame(teams.Values.First (team => team.points >= minigame.winningPoints));
             }
         }
 

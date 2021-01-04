@@ -14,15 +14,15 @@ namespace Player {
             instance = this;
         }
 
-        private void Start () { HideCursor (); }
-
         private void Update () {
             if (Input.GetKeyDown (KeyCode.Escape)) {
                 ShowCursor ();
-            } else if (Input.GetKeyUp (KeyCode.Escape) && !GameManager.instance.isInLobby) {
+            } else if (Input.GetKeyUp (KeyCode.Escape) && !GameManager.instance.isInGUI) {
                 HideCursor ();
             }
         }
+
+        private void OnEnable () { HideCursor (); }
 
         public void ShowCursor () { Cursor.lockState = CursorLockMode.None; }
 

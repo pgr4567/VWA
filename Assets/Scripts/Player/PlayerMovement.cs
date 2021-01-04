@@ -17,7 +17,7 @@ namespace Player {
         private Vector3 _velocity = Vector3.zero;
 
         private void Update () {
-            if (!isLocalPlayer || GameManager.instance.isInLobby) {
+            if (!isLocalPlayer || GameManager.instance.isInGUI) {
                 return;
             }
 

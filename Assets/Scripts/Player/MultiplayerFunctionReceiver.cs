@@ -1,6 +1,8 @@
+using Chat;
 using General;
 using Minigames;
 using Mirror;
+using UI;
 
 namespace Player {
     public class MultiplayerFunctionReceiver : NetworkBehaviour {
@@ -13,7 +15,7 @@ namespace Player {
         private void RegisterEventHandlers () {
             NetworkClient.RegisterHandler<MirrorMinigameMessage> (CreateMinigame);
             NetworkClient.RegisterHandler<FreezeMovementMessage> (msg => {
-                GameManager.instance.isInLobby = msg.freeze;
+                GameManager.instance.isInGUI = msg.freeze;
             });
             NetworkClient.RegisterHandler<MirrorRemoveMinigameInstanceMessage> (msg => {
                 MinigameDispatcher.instance.RemoveMinigameInstanceClient (msg.name, msg.worldID, msg.gameID);
@@ -24,6 +26,7 @@ namespace Player {
             NetworkClient.RegisterHandler<MinigameListUpdateMessage> (msg => {
                 GameManager.instance.UpdateMinigameList (msg.gameIDs);
             });
+            NetworkClient.RegisterHandler<ChatMessage> (msg => { ChatCanvas.instance.AppendMessage (msg); });
         }
 
         private void CreateMinigame (MirrorMinigameMessage msg) {

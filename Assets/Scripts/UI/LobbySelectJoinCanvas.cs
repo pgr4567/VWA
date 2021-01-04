@@ -27,7 +27,7 @@ namespace UI {
             }
 
             NetworkClient.Send (
-                new JoinMinigameMessage { username = PlayerPrefs.GetString ("username"), gameID = gameID });
+                new JoinMinigameMessage { username = GameManager.instance.username, gameID = gameID });
         }
 
         public void UpdateMinigameList () {

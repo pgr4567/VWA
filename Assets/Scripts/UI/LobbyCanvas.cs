@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using General;
 using Minigames;
 using Mirror;
 using Player;
@@ -74,7 +75,7 @@ namespace UI {
         public void LeaveLobby () {
             MouseController.instance.HideCursor ();
             NetworkClient.Send (new LeaveMinigameMessage
-                { username = PlayerPrefs.GetString ("username"), gameID = _gameID });
+                { username = GameManager.instance.username, gameID = _gameID });
             gameObject.SetActive (false);
         }
     }

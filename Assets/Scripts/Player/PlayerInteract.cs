@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Player {
     public class PlayerInteract : NetworkBehaviour {
         private void Update () {
-            if (!isLocalPlayer || GameManager.instance.isInLobby) {
+            if (!isLocalPlayer || GameManager.instance.isInGUI) {
                 return;
             }
 
@@ -20,12 +20,12 @@ namespace Player {
 
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer ("TempStartGame")) {
                     NetworkClient.Send (new CreateMinigameMessage
-                        { name = "Labyrinth", username = PlayerPrefs.GetString ("username") });
+                        { name = "Labyrinth", username = GameManager.instance.username });
                 }
 
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer ("TempLeaveGame")) {
                     NetworkClient.Send (new LeaveMinigameMessage
-                        { username = PlayerPrefs.GetString ("username"), gameID = "(27.0, 0.0, 7.0)Labyrinth" });
+                        { username = GameManager.instance.username, gameID = "(27.0, 0.0, 7.0)Labyrinth" });
                 }
             }
         }

@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Chat;
 using Minigames;
 using Mirror;
+using Networking;
 using Player;
 using UI;
 using UnityEngine;
@@ -8,11 +12,13 @@ using UnityEngine;
 namespace General {
     public class GameManager : NetworkBehaviour {
         public static GameManager instance;
-        public bool isInLobby;
-        public new bool isServer;
+        [HideInInspector] public bool isInGUI;
+        [HideInInspector] public new bool isServer;
         [SerializeField] private GameObject lobbyCanvas;
+        [SerializeField] private GameObject finishGameCanvas;
         [SerializeField] private Transform worldSpawnTransform;
         public Action onMinigameListUpdate;
+        public string username { get; private set; }
         public string[] minigameIDs { get; private set; }
 
         public Vector3 worldSpawn {
@@ -30,6 +36,7 @@ namespace General {
 
         private void Start () {
             if (!NetworkServer.active) {
+                username = PlayerPrefs.GetString ("username");
                 return;
             }
 
@@ -40,6 +47,17 @@ namespace General {
             go.transform.eulerAngles = new Vector3 (90, 0, 0);
 
             Cursor.lockState = CursorLockMode.None;
+
+            SetupServerListeners ();
+        }
+
+        private void SetupServerListeners () {
+            NetworkServer.RegisterHandler<ChatMessage> (msg => {
+                foreach (KeyValuePair<string, GameObject> val in MainNetworkManager.instance.playerObjs.Where (val =>
+                    val.Key != msg.sender)) {
+                    NetworkServer.SendToClientOfPlayer (val.Value.GetComponent<NetworkIdentity> (), msg);
+                }
+            });
         }
 
         public void UpdateMinigameList (string[] gameIDs) {
@@ -71,6 +89,14 @@ namespace General {
         public void TargetHideLobbyCanvas (NetworkConnection target) {
             lobbyCanvas.SetActive (false);
             MouseController.instance.HideCursor ();
+        }
+
+        [TargetRpc]
+        public void TargetShowFinishGameCanvas (NetworkConnection target, Minigame game, MinigameTeam teamWon) {
+            finishGameCanvas.GetComponent<FinishGameCanvas> ().ShowCanvas (game, teamWon);
+            finishGameCanvas.SetActive (true);
+            isInGUI = true;
+            MouseController.instance.ShowCursor ();
         }
     }
 }
