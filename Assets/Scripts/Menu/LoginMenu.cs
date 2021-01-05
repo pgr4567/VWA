@@ -1,4 +1,5 @@
-﻿using Networking;
+﻿using General;
+using Networking;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,6 +41,10 @@ namespace Menu {
 
         public void StartClient () {
             if (_starting) {
+                return;
+            }
+            if (!VersionChecker.instance.hasCheckedVersion) {
+                Debug.Log ("VersionChecker has not yet run");
                 return;
             }
 

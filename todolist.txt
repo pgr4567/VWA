@@ -23,4 +23,6 @@
 [ ] shop
 [ ] get money
 [ ] items
-[ ] forbid joining with the same version
+[x] forbid joining with an old version
+[ ] show versionchecker has not yet run screen
+[ ] make playing players invisible for others

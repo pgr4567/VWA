@@ -41,5 +41,12 @@ namespace Player {
             _velocity.y += gravity * Time.deltaTime;
             controller.Move ((move + _velocity) * Time.deltaTime);
         }
+
+        [ClientRpc(excludeOwner = true)]
+        public void RpcSetVisible (bool visible) {
+            if (!GameManager.instance.isInGame) {
+                GetComponentInChildren<MeshRenderer> ().enabled = visible;
+            }
+        }
     }
 }

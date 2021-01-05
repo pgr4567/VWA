@@ -20,6 +20,7 @@ namespace General {
         public Action onMinigameListUpdate;
         public string username { get; private set; }
         public string[] minigameIDs { get; private set; }
+        public bool isInGame;
 
         public Vector3 worldSpawn {
             get { return worldSpawnTransform.position; }
@@ -97,6 +98,11 @@ namespace General {
             finishGameCanvas.SetActive (true);
             isInGUI = true;
             MouseController.instance.ShowCursor ();
+        }
+
+        [TargetRpc]
+        public void TargetSetInGame (NetworkConnection target, bool inGame) {
+            isInGame = inGame;
         }
     }
 }

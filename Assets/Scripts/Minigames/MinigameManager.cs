@@ -89,7 +89,7 @@ namespace Minigames {
             MainNetworkManager.instance.players[username].Send (new FreezeMovementMessage { freeze = true });
             GameManager.instance.TargetShowLobbyCanvas (MainNetworkManager.instance.players[username], minigame,
                 teams[Colors.colors[0]], teams[Colors.colors[1]], isOwner, gameID);
-
+            GameManager.instance.TargetSetInGame (MainNetworkManager.instance.players[username], true);
             foreach (string uName in players) {
                 GameManager.instance.TargetUpdateTeams (MainNetworkManager.instance.players[uName],
                     teams[Colors.colors[0]], teams[Colors.colors[1]]);
@@ -130,6 +130,7 @@ namespace Minigames {
                 isRunning = true;
                 foreach (MinigameTeam team in teams.Values)
                 foreach (string pName in team.players) {
+                    MainNetworkManager.instance.playerObjs[pName].GetComponent<PlayerMovement> ().RpcSetVisible (false);
                     GameObject player = MainNetworkManager.instance.playerObjs[pName];
                     player.GetComponent<NetworkTransform> ().ServerTeleport (team.spawnPoint);
                     await Task.Delay (100);
@@ -179,6 +180,8 @@ namespace Minigames {
         }
 
         private void LeavePlayerInternal (PlayerMovement player, string username) {
+            GameManager.instance.TargetSetInGame (MainNetworkManager.instance.players[username], false);
+            MainNetworkManager.instance.playerObjs[username].GetComponent<PlayerMovement> ().RpcSetVisible (true);
             MainNetworkManager.instance.players[username].Send (new FreezeMovementMessage { freeze = false });
             GameManager.instance.TargetHideLobbyCanvas (MainNetworkManager.instance.players[username]);
             TeleportPlayer (player, GameManager.instance.worldSpawn);
