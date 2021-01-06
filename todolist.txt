@@ -5,7 +5,6 @@
 [x] Wenn host verlässt, neuen host finden.
 [x] Lock login button after first klick
 [x] Session Tokens
-[ ] Redo Menus
 [x] Make Option to disable Password Saving
 [x] Register Menu
 [ ] Re-Try Login if failed, after n times return to main menu
@@ -20,7 +19,7 @@
 [ ] move backend server back to backend
 [x] chat
 [x] HUD with money
-[ ] shop
+[x] shop
 [x] get money
 [ ] items
 [x] forbid joining with an old version

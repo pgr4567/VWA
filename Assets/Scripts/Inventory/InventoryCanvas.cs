@@ -27,7 +27,7 @@ namespace Inventory {
                 LoadItems ();
             } else {
                 GameManager.instance.isInGUI = false;
-                MouseController.instance.HideCursor();
+                MouseController.instance.HideCursor ();
             }
         }
 
@@ -46,7 +46,8 @@ namespace Inventory {
 
         private void AddItem (Item item) {
             GameObject go = Instantiate (itemPrefab, itemParent);
-            go.GetComponentInChildren<Image> ().sprite      = item.sprite;
+            go.GetComponentInChildren<Image> ().sprite = item.sprite;
+            _items.Add (item, go);
         }
     }
 }

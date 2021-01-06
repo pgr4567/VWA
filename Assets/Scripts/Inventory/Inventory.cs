@@ -17,6 +17,9 @@ namespace Inventory {
 
         private static void LoadItems (string itemStr) {
             foreach (string item in itemStr.Split (';')) {
+                if (item.Trim () == "") {
+                    continue;
+                }
                 if (ShopManager.items.Count (i => i.name == item) > 0) {
                     AddItem (ShopManager.items.First(i => i.name == item));
                 }

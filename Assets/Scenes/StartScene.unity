@@ -622,6 +622,7 @@ MonoBehaviour:
   invalidVersionCanvas: {fileID: 1490227600}
   yourVersion: {fileID: 660920793}
   serverVersion: {fileID: 1389397384}
+  hasCheckedVersion: 0
 --- !u!1 &1009119042
 GameObject:
   m_ObjectHideFlags: 0
