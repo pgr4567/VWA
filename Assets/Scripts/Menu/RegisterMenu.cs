@@ -1,4 +1,5 @@
 ﻿using Networking;
+using Networking.RequestMessages;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +13,7 @@ namespace Menu {
         [SerializeField] private Toggle passwordToggle;
         [SerializeField] private TMP_Text resultText;
 
-        private void Start () { passwordToggle.isOn = PlayerPrefs.GetInt ("passwordToggle") == 1 ? true : false; }
+        private void Start () { passwordToggle.isOn = PlayerPrefs.GetInt ("passwordToggle") == 1; }
 
         private void SaveCredentials () {
             PlayerPrefs.SetString ("username", username.text);
@@ -32,16 +33,24 @@ namespace Menu {
                 return;
             }
 
-            string response = Helpers.Get ("http://vwaspiel.de:3000/register?username=" + username.text + "&password=" +
+            string response = Helpers.Get ("http://www.vwaspiel.de:3000/register?username=" + username.text + "&password=" +
                                            password.text);
-            if (response == "SUCCESS") {
-                SaveCredentials ();
-                Login ();
-            } else if (response == "UNEXPECTED ERROR") {
-                resultText.text = "Unerwarteter Fehler. Versuche es bitte erneut.";
-            } else if (response == "ERROR: USERNAME EXISTS") {
-                resultText.text = "Dieser Username existiert bereits. Bitte nimm einen anderen.";
+            switch (response) {
+                case ServerResponses.Success:
+                    SaveCredentials ();
+                    Login ();
+                    break;
+                case ServerResponses.UnexpectedError:
+                    resultText.text = "Unerwarteter Fehler. Versuche es bitte erneut.";
+                    break;
+                case ServerResponses.RgUsernameExist:
+                    resultText.text = "Dieser Username existiert bereits. Bitte nimm einen anderen.";
+                    break;
+                case ServerResponses.InvalidUsernamePassword:
+                    resultText.text = "Username oder Passwort ist nicht zulässig.";
+                    break;
             }
+            Debug.Log (response);
         }
 
         public void PasswordToggle (bool isOn) {

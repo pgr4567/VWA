@@ -39,6 +39,7 @@ namespace General {
             } else {
                 hasCheckedVersion = true;
             }
+            _checkVersionThread.Abort();
         }
 
         public void QuitGame () {

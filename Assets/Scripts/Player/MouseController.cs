@@ -1,11 +1,17 @@
-﻿using General;
+﻿using System.Threading.Tasks;
+using General;
 using UnityEngine;
 
 namespace Player {
     public class MouseController : MonoBehaviour {
         public static MouseController instance;
 
-        private void Awake () {
+        private async void Awake () {
+            //TODO: WHYYYYYYY
+            await Task.Delay (200);
+            if (GameManager.instance.isServer) {
+                return;
+            }
             if (instance != null) {
                 Debug.LogWarning ("There must only be one MouseController in the scene.");
                 Destroy (this);

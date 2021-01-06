@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Chat;
 using General;
 using Mirror;
@@ -17,7 +18,12 @@ namespace UI {
         private readonly Queue<GameObject> _messageObjs = new Queue<GameObject> ();
         private readonly Queue<ChatMessage> _messages = new Queue<ChatMessage> ();
 
-        private void Awake () {
+        private async void Awake () {
+            //TODO: WHYYYYYYY
+            await Task.Delay (200);
+            if (GameManager.instance.isServer) {
+                return;
+            }
             if (instance != null) {
                 Debug.LogWarning ("There must only ever be one ChatCanvas!");
                 Destroy (gameObject);

@@ -2,7 +2,9 @@ using Chat;
 using General;
 using Minigames;
 using Mirror;
+using Networking;
 using UI;
+using UnityEngine;
 
 namespace Player {
     public class MultiplayerFunctionReceiver : NetworkBehaviour {
@@ -27,6 +29,7 @@ namespace Player {
                 GameManager.instance.UpdateMinigameList (msg.gameIDs);
             });
             NetworkClient.RegisterHandler<ChatMessage> (msg => { ChatCanvas.instance.AppendMessage (msg); });
+            NetworkClient.RegisterHandler<SessionInvalidatedMessage>(msg => { Debug.LogWarning ("Should display something here."); });
         }
 
         private void CreateMinigame (MirrorMinigameMessage msg) {

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Minigames;
 using Mirror;
+using Networking.RequestMessages;
 using UnityEngine;
 
 namespace Networking {
@@ -11,6 +12,8 @@ namespace Networking {
         public GameObject remotePlayer;
         public Dictionary<string, GameObject> playerObjs = new Dictionary<string, GameObject> ();
         public Dictionary<string, NetworkConnection> players = new Dictionary<string, NetworkConnection> ();
+        public RequestManagerClient requestManagerClient;
+        public RequestManagerServer requestManagerServer;
 
         public override void Awake () {
             if (instance != null) {
@@ -23,7 +26,7 @@ namespace Networking {
         }
 
         private void AddPlayerToDictionary (NetworkConnection conn) {
-            string username = ((MainNetworkAuthenticator.AuthRequestMessage)conn.authenticationData).username;
+            string username = ((AuthenticationData)conn.authenticationData).username;
             Debug.Log ($"Trying to connect: {username}");
             if (players.ContainsKey (username)) {
                 conn.Disconnect ();
@@ -38,15 +41,27 @@ namespace Networking {
         }
 
         public void RemovePlayerFromDictionary (NetworkConnection conn) {
-            string username = ((MainNetworkAuthenticator.AuthRequestMessage)conn.authenticationData).username;
+            string username = ((AuthenticationData)conn.authenticationData).username;
             players.Remove (username);
             playerObjs.Remove (username);
         }
 
         public override void OnServerConnect (NetworkConnection conn) {
+            if (requestManagerServer == null) {
+                requestManagerServer = new RequestManagerServer ();
+            }
+
             AddPlayerToDictionary (conn);
 
             SendPlayerMinigameList (conn);
+        }
+
+        public override void OnClientConnect (NetworkConnection conn) {
+            if (requestManagerClient == null) {
+                requestManagerClient = new RequestManagerClient ();
+            }
+
+            base.OnClientConnect (conn);
         }
 
         public override void OnServerDisconnect (NetworkConnection conn) {
@@ -63,9 +78,14 @@ namespace Networking {
             base.OnClientDisconnect (conn);
         }
 
+        public void DisconnectClient (string username) {
+            players[username].Send (new SessionInvalidatedMessage ());
+            players[username].Disconnect ();
+        }
+
         private async void SendPlayerMinigameList (NetworkConnection conn) {
             await Task.Delay (500);
-            string username = ((MainNetworkAuthenticator.AuthRequestMessage)conn.authenticationData).username;
+            string username = ((AuthenticationData)conn.authenticationData).username;
             MinigameDispatcher.instance.SendMinigameListUpdateToClient (playerObjs[username]
                 .GetComponent<NetworkIdentity> ());
         }

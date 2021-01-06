@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Mirror;
+using Networking.RequestMessages;
 using UnityEngine;
 
 /*
@@ -18,6 +20,7 @@ namespace Networking {
 
         public struct AuthResponseMessage : NetworkMessage {
             public bool authenticated;
+            public string sessionToken;
         }
 #endregion
 
@@ -38,29 +41,42 @@ namespace Networking {
         public override void OnServerAuthenticate (NetworkConnection conn) { }
 
         public void OnAuthRequestMessage (NetworkConnection conn, AuthRequestMessage msg) {
-            string response =
-                Helpers.Get ("http://vwaspiel.de:3000/login?username=" + msg.username + "&password=" + msg.password);
-            if (response == "SUCCESS") {
-                AuthResponseMessage authResponseMessage = new AuthResponseMessage { authenticated = true };
+            string loginResponse =
+                Helpers.Get ("http://www.vwaspiel.de:3000/login?username=" + msg.username + "&password=" + msg.password);
+            if (loginResponse == ServerResponses.Success) {
+                string generateSessionTokenResponse = SessionManager.GenerateSessionID (msg.username);
+                if (generateSessionTokenResponse == ServerResponses.Success) {
+                    string getSessionTokenResponse = SessionManager.GetSessionToken(msg.username);
+                    if (getSessionTokenResponse != ServerResponses.UnexpectedError && getSessionTokenResponse != ServerResponses.UsernameNotExist && getSessionTokenResponse != ServerResponses.SessionTimeInvalid) {
+                        string getSessionTokenTimeResponse = SessionManager.GetSessionTime(msg.username);
+                        if (getSessionTokenTimeResponse == ServerResponses.UnexpectedError ||
+                            getSessionTokenTimeResponse == ServerResponses.UsernameNotExist) {
+                            return;
+                        }
+                        AuthResponseMessage authResponseMessage = new AuthResponseMessage { authenticated = true, sessionToken = getSessionTokenResponse };
+                        conn.authenticationData = new AuthenticationData
+                            { username = msg.username, sessionToken = getSessionTokenResponse, sessionTime = DateTime.Parse (getSessionTokenTimeResponse.Replace ("\"", "")) };
+                        conn.isAuthenticated = true;
+                        conn.Send (authResponseMessage);
 
-                conn.authenticationData = msg;
-                conn.isAuthenticated    = true;
-                conn.Send (authResponseMessage);
-
-                // Invoke the event to complete a successful authentication
-                OnServerAuthenticated.Invoke (conn);
+                        // Invoke the event to complete a successful authentication
+                        OnServerAuthenticated.Invoke (conn);
+                    } else {
+                        Disconnect (conn);
+                    }
+                } else {
+                    Disconnect (conn);
+                }
             } else {
-                AuthResponseMessage authResponseMessage = new AuthResponseMessage { authenticated = false };
-
-                conn.authenticationData = msg;
-                conn.isAuthenticated    = false;
-                conn.Send (authResponseMessage);
-
                 Disconnect (conn);
             }
         }
 
         private IEnumerator Disconnect (NetworkConnection conn) {
+            AuthResponseMessage authResponseMessage = new AuthResponseMessage { authenticated = false };
+            conn.isAuthenticated = false;
+            conn.Send (authResponseMessage);
+            
             yield return new WaitForSeconds (1f);
             conn.Disconnect ();
         }
@@ -91,6 +107,7 @@ namespace Networking {
         private void OnAuthResponseMessage (NetworkConnection conn, AuthResponseMessage msg) {
             if (msg.authenticated) // Invoke the event to complete a successful authentication
             {
+                PlayerPrefs.SetString ("sessionToken", msg.sessionToken);
                 OnClientAuthenticated.Invoke (conn);
             } else {
                 conn.Disconnect ();

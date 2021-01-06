@@ -4,7 +4,7 @@
 [x] OnQuitGame -> Aus Minigame leaven
 [x] Wenn host verlässt, neuen host finden.
 [x] Lock login button after first klick
-[ ] Session Tokens
+[x] Session Tokens
 [ ] Redo Menus
 [x] Make Option to disable Password Saving
 [x] Register Menu
@@ -17,7 +17,7 @@
 [x] delete "" user and "" password
 [ ] why is cursor locked when in FinishGameCanvas?
 [x] prevent "" user and "" password, maybe add minimum length
-[ ] authentication server add authentication for server.
+[ ] move backend server back to backend
 [x] chat
 [ ] HUD with money
 [ ] shop
@@ -25,4 +25,15 @@
 [ ] items
 [x] forbid joining with an old version
 [ ] show versionchecker has not yet run screen
-[ ] make playing players invisible for others
+[x] make playing players invisible for others
+[ ] stats page on domain public server
+[ ] show session invalidated screen
+[x] move everything except login, register and version to another server -> backend
+[ ] player ranks and permissions
+[ ] commands and console
+[ ] Biome
+[ ] procedurally generate
+[ ] snowman
+[ ] friend system
+[ ] invites
+[x] convert error strings to variables

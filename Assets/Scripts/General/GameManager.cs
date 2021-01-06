@@ -19,6 +19,7 @@ namespace General {
         [SerializeField] private Transform worldSpawnTransform;
         public Action onMinigameListUpdate;
         public string username { get; private set; }
+        public string sessionToken { get; private set; }
         public string[] minigameIDs { get; private set; }
         public bool isInGame;
 
@@ -37,7 +38,8 @@ namespace General {
 
         private void Start () {
             if (!NetworkServer.active) {
-                username = PlayerPrefs.GetString ("username");
+                username     = PlayerPrefs.GetString ("username");
+                sessionToken = PlayerPrefs.GetString ("sessionToken");
                 return;
             }
 
