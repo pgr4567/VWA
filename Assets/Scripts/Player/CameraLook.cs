@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using General;
+using Mirror;
 using UnityEngine;
 
 namespace Player {
@@ -21,7 +22,7 @@ namespace Player {
         }
 
         private void Update () {
-            if (!isLocalPlayer) {
+            if (!isLocalPlayer || GameManager.instance.isInGUI) {
                 return;
             }
 

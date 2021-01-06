@@ -34,10 +34,17 @@ namespace UI {
         }
 
         public void ToggleChat () {
+            if (GameManager.instance.isInGUI && !chatUI.activeSelf || GameManager.instance.isServer) {
+                return;
+            }
             chatUI.SetActive(!chatUI.activeSelf);
             if (chatUI.activeSelf) {
                 GameManager.instance.isInGUI = true;
                 MouseController.instance.ShowCursor();
+            }
+            else {
+                GameManager.instance.isInGUI = false;
+                MouseController.instance.HideCursor();
             }
         }
 

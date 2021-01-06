@@ -19,9 +19,9 @@
 [x] prevent "" user and "" password, maybe add minimum length
 [ ] move backend server back to backend
 [x] chat
-[ ] HUD with money
+[x] HUD with money
 [ ] shop
-[ ] get money
+[x] get money
 [ ] items
 [x] forbid joining with an old version
 [ ] show versionchecker has not yet run screen
@@ -37,3 +37,11 @@
 [ ] friend system
 [ ] invites
 [x] convert error strings to variables
+[ ] reload items
+[ ] new input system
+[ ] settings menu
+[ ] key rebinding
+[ ] mobile optimize
+[ ] modeln
+[ ] party chat
+[ ] private message system

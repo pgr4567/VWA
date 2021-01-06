@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Networking.RequestMessages {
     public class RequestManagerClient {
         public int maxTries = 5;
-        public Action<string> onMoneyRequest;
+        public Action<string, string, string[]> onResponse;
         public static RequestManagerClient instance;
 
         public RequestManagerClient () {
@@ -20,24 +20,31 @@ namespace Networking.RequestMessages {
 
         private void SetupHandlers () {
             NetworkClient.RegisterHandler<RequestResourceMessage> (msg => {
-                //TODO: HANDLE OTHER STATI EXCEPT ResponseResourceStatus.SUCCESS
-                if (msg.responseStatus == ResponseResourceStatus.SUCCESS) {
-                    switch (msg.request) {
-                        case "money":
-                            onMoneyRequest?.Invoke (msg.response);
-                            break;
-                    }
-                } else if (msg.tryNumber <= maxTries - 1) {
+                Debug.Log ("Receiving response: " + msg.response + ", for request: " + msg.request + ", status is: " + msg.responseStatus);
+                if (msg.responseStatus == ResponseResourceStatus.SUCCESS) {            
+                    onResponse?.Invoke (msg.request, msg.response, msg.args);
+                }
+                else if (msg.responseStatus == ResponseResourceStatus.FORBIDDEN) {
+                    //TODO: MAYBE onForbidden?
+                }
+                else if (msg.responseStatus == ResponseResourceStatus.ERROR && msg.tryNumber <= maxTries - 1) {
                     NetworkClient.Send (new RequestResourceMessage {
                         username = GameManager.instance.username, sessionToken = GameManager.instance.sessionToken,
-                        request  = msg.request, tryNumber                      = msg.tryNumber + 1
+                        request  = msg.request, args                           = msg.args, tryNumber = msg.tryNumber + 1
                     });
+                }
+                else if (msg.responseStatus == ResponseResourceStatus.NOT_FOUND) {
+                    Debug.LogWarning("Issued request: " + msg.request + ", but was not found on server.");
                 }
             });
         }
 
-        public void SendRequest (string request) {
-            NetworkClient.Send (new RequestResourceMessage { username = GameManager.instance.username, sessionToken = GameManager.instance.sessionToken, request = request, tryNumber = 0 });
+        public void SendRequest (string request, params string[] args) {
+            Debug.Log ("Sending request: " + request);
+            NetworkClient.Send (new RequestResourceMessage {
+                username = GameManager.instance.username, sessionToken = GameManager.instance.sessionToken,
+                request  = request, args                               = args, tryNumber = 0
+            });
         }
     }
 }
