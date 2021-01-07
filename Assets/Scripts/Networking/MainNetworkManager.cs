@@ -9,7 +9,6 @@ namespace Networking {
     public class MainNetworkManager : NetworkManager {
         public static MainNetworkManager instance;
         public GameObject localPlayer;
-        public GameObject remotePlayer;
         public Dictionary<string, GameObject> playerObjs = new Dictionary<string, GameObject> ();
         public Dictionary<string, NetworkConnection> players = new Dictionary<string, NetworkConnection> ();
         public RequestManagerClient requestManagerClient;

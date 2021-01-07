@@ -42,7 +42,7 @@ namespace Player {
             controller.Move ((move + _velocity) * Time.deltaTime);
         }
 
-        [ClientRpc(excludeOwner = true)]
+        [ClientRpc (excludeOwner = true)]
         public void RpcSetVisible (bool visible) {
             if (!GameManager.instance.isInGame) {
                 GetComponentInChildren<MeshRenderer> ().enabled = visible;

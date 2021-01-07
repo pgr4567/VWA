@@ -18,6 +18,11 @@ namespace Player {
                 gameObject.name = "LocalPlayer";
             } else {
                 gameObject.name = "RemotePlayer";
+                Destroy (GetComponent<PlayerMovement>());
+                Destroy (GetComponent<CharacterController>());
+                Destroy (GetComponent<CameraLook>());
+                Destroy (GetComponent<MultiplayerFunctionReceiver>());
+                Destroy (GetComponent<PlayerInteract>());
             }
         }
 

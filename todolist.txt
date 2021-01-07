@@ -44,3 +44,4 @@
 [ ] modeln
 [ ] party chat
 [ ] private message system
+//TODO: add settings menu

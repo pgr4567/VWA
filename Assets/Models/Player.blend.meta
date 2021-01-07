@@ -15,7 +15,8 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: 
+    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
+      human bone 'Hips' not found\n"
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
@@ -77,7 +78,62 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton: []
+    skeleton:
+    - name: Player(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Body
+      parentName: Player(Clone)
+      position: {x: -0, y: 1, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Eye Left
+      parentName: Player(Clone)
+      position: {x: -0.53559846, y: 3.2371228, z: -0.16817272}
+      rotation: {x: -0.54226494, y: -0.54383266, z: 0.319956, w: 0.554818}
+      scale: {x: 0.08152096, y: 0.08152096, z: 0.08152096}
+    - name: Eye Right
+      parentName: Player(Clone)
+      position: {x: -0.53559846, y: 3.2371228, z: 0.16708723}
+      rotation: {x: -0.14968482, y: -0.59487957, z: 0.05605253, w: 0.7877633}
+      scale: {x: 0.08152096, y: 0.08152096, z: 0.08152096}
+    - name: Carrot
+      parentName: Player(Clone)
+      position: {x: -0.69216776, y: 3.0875764, z: 0}
+      rotation: {x: -0.33902115, y: -0.6205358, z: 0.33902115, w: 0.6205358}
+      scale: {x: 0.09687647, y: 0.09687647, z: 0.11315067}
+    - name: Pebbel 3
+      parentName: Player(Clone)
+      position: {x: -0.65875655, y: 2.0237405, z: 0}
+      rotation: {x: 0.42646903, y: 0.564025, z: -0.564025, w: -0.42646903}
+      scale: {x: 0.042680155, y: 0.042680155, z: 0.042680155}
+    - name: Pebble 1
+      parentName: Player(Clone)
+      position: {x: -0.70656353, y: 2.441498, z: 0}
+      rotation: {x: 0.49999997, y: 0.5000001, z: -0.5, w: -0.49999988}
+      scale: {x: 0.042680155, y: 0.042680155, z: 0.042680155}
+    - name: Pebble 2
+      parentName: Player(Clone)
+      position: {x: -0.6985871, y: 2.224861, z: 0}
+      rotation: {x: 0.49999997, y: 0.5000001, z: -0.5, w: -0.49999988}
+      scale: {x: 0.042680155, y: 0.042680155, z: 0.042680155}
+    - name: Walking Ball
+      parentName: Player(Clone)
+      position: {x: -0, y: 1, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cube
+      parentName: Player(Clone)
+      position: {x: -0, y: 2.4513974, z: -0.52477145}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 0.26079366, y: 0.26079366, z: 0.26079366}
+    - name: Cube.001
+      parentName: Player(Clone)
+      position: {x: -0, y: 2.4513974, z: 0.60662043}
+      rotation: {x: -0.00000013767877, y: 0.7071068, z: 0.70710677, w: 0.00000013767878}
+      scale: {x: 0.26079366, y: 0.26079366, z: 0.26079366}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -92,9 +148,9 @@ ModelImporter:
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 3
+  animationType: 0
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
