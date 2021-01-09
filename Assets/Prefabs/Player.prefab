@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 873080044681189133}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6831643975665630448}
@@ -40,6 +40,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6831643975665630448}
   - component: {fileID: 6831643975665630449}
+  - component: {fileID: 6944671195612198120}
+  - component: {fileID: 4546410056205756784}
   - component: {fileID: 2522061098059556919}
   - component: {fileID: 5354683162581804420}
   - component: {fileID: 4528272297627439710}
@@ -88,6 +90,36 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.96, z: 0}
+--- !u!136 &6944671195612198120
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831643975665630446}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.55
+  m_Height: 2.2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.96, z: 0}
+--- !u!54 &4546410056205756784
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831643975665630446}
+  serializedVersion: 2
+  m_Mass: 0.0000001
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 1
 --- !u!114 &2522061098059556919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,7 +138,7 @@ MonoBehaviour:
   movementSpeed: 10
   gravity: -9.81
   groundCheckSphere: {fileID: 7973191415228001503}
-  maxGroundDistance: 0.1
+  maxGroundDistance: 0.2
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 256

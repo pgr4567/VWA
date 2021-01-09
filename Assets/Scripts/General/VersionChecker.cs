@@ -9,8 +9,8 @@ namespace General {
         [SerializeField] private TextAsset versionFile;
         [SerializeField] private GameObject[] canvases;
         [SerializeField] private GameObject invalidVersionCanvas;
-        [SerializeField] private TMP_Text yourVersion;
-        [SerializeField] private TMP_Text serverVersion;
+        [SerializeField] private TMP_Text yourVersionText;
+        [SerializeField] private TMP_Text serverVersionText;
         private string _localVersion;
         private Thread _checkVersionThread;
         public bool hasCheckedVersion;
@@ -33,8 +33,8 @@ namespace General {
                     go.SetActive(false);
                 }
 
-                yourVersion.text   = "Deine Version ist: " + versionFile.text;
-                serverVersion.text = "Die Version des Servers ist: " + version;
+                yourVersionText.text   = "Deine Version ist: " + versionFile.text;
+                serverVersionText.text = "Die Version des Servers ist: " + version;
                 invalidVersionCanvas.SetActive(true);
             } else {
                 hasCheckedVersion = true;

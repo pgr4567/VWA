@@ -1,5 +1,4 @@
-﻿using Mirror;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Player {
     public class PlayerAnimator : MonoBehaviour {

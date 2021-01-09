@@ -38,10 +38,17 @@
 [x] convert error strings to variables
 [ ] reload items
 [ ] new input system
-[ ] settings menu
+[x] settings system
+[ ] expand settings screen
+[ ] make settings accessible frmo anywhere
 [ ] key rebinding
 [ ] mobile optimize
 [ ] modeln
 [ ] party chat
 [ ] private message system
-//TODO: add settings menu
+[x] fix jumping
+[x] fix minigames are no longer working -> SetRpcVisible
+[x] add colliders to players again!
+[x] fix goal not registering collision -> collision only registering on clients
+[ ] kreuzprodukt
+[ ] todo -> add settings menu

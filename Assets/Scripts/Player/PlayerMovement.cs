@@ -1,4 +1,5 @@
-﻿using General;
+﻿using System;
+using General;
 using Mirror;
 using UnityEngine;
 
@@ -44,8 +45,14 @@ namespace Player {
 
         [ClientRpc (excludeOwner = true)]
         public void RpcSetVisible (bool visible) {
-            if (!GameManager.instance.isInGame) {
-                GetComponentInChildren<MeshRenderer> ().enabled = visible;
+            // Is local player inGame? If so, dont disable player.
+            //TODO: Could lead to cases where player was playing, then left and now sees visible players that should be invisible.
+            if (GameManager.instance.isInGame) {
+                return;
+            }
+
+            foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer> ()) {
+                mr.enabled = visible;
             }
         }
     }

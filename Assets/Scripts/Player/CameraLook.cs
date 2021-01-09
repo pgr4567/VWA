@@ -13,12 +13,11 @@ namespace Player {
 
         private void Start () {
             if (isLocalPlayer) {
-                _camera = Instantiate (cameraPrefab, new Vector3 (0, 0.5f, 0), Quaternion.identity, transform)
+                _camera = Instantiate (cameraPrefab, new Vector3 (0, 1.5f, 0), Quaternion.identity, transform)
                     .transform;
                 gameObject.name = "LocalPlayer";
             } else {
                 gameObject.name = "RemotePlayer";
-                Destroy (GetComponent<PlayerMovement>());
                 Destroy (GetComponent<CharacterController>());
                 Destroy (GetComponent<CameraLook>());
                 Destroy (GetComponent<MultiplayerFunctionReceiver>());

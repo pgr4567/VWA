@@ -130,7 +130,7 @@ namespace Minigames {
                 isRunning = true;
                 foreach (MinigameTeam team in teams.Values)
                 foreach (string pName in team.players) {
-                    MainNetworkManager.instance.playerObjs[pName].GetComponent<PlayerMovement> ().RpcSetVisible (false);
+                    //MainNetworkManager.instance.playerObjs[pName].GetComponent<PlayerMovement> ().RpcSetVisible (false);
                     GameObject player = MainNetworkManager.instance.playerObjs[pName];
                     player.GetComponent<NetworkTransform> ().ServerTeleport (team.spawnPoint);
                     await Task.Delay (100);
@@ -181,7 +181,8 @@ namespace Minigames {
 
         private void LeavePlayerInternal (PlayerMovement player, string username) {
             GameManager.instance.TargetSetInGame (MainNetworkManager.instance.players[username], false);
-            MainNetworkManager.instance.playerObjs[username].GetComponent<PlayerMovement> ().RpcSetVisible (true);
+            Debug.Log (MainNetworkManager.instance.playerObjs[username]);
+            player.RpcSetVisible (true);
             MainNetworkManager.instance.players[username].Send (new FreezeMovementMessage { freeze = false });
             GameManager.instance.TargetHideLobbyCanvas (MainNetworkManager.instance.players[username]);
             TeleportPlayer (player, GameManager.instance.worldSpawn);
