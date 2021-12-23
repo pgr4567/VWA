@@ -7,5 +7,6 @@ namespace Shops {
         public Sprite sprite;
         public int price;
         public bool sellable = true;
+        public ItemCategory category;
     }
 }

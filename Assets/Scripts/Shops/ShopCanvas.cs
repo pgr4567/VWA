@@ -28,16 +28,16 @@ namespace Shops {
                     Buy (args[0]);
                 }
             };
-            ReloadShop();
+            ReloadShop ();
         }
 
         private void ReloadShop () {
-            foreach (Item item in ShopManager.items.Where(i => i.sellable && !Inventory.Inventory.items.Contains(i))) {
+            foreach (Item item in ShopManager.items.Where (i => i.sellable && !Inventory.Inventory.items.Contains (i) && !_items.ContainsKey (i))) {
                 AddItem (item);
             }
 
             foreach (Item item in Inventory.Inventory.items) {
-                RemoveItem(item);
+                RemoveItem (item);
             }
         }
 
@@ -50,7 +50,7 @@ namespace Shops {
 
         public void AddItem (Item item) {
             GameObject go = Instantiate (itemPrefab, itemParent);
-            go.GetComponentInChildren<Image> ().sprite      = item.sprite;
+            go.GetComponentInChildren<Image> ().sprite = item.sprite;
             go.GetComponentsInChildren<TMP_Text> ()[0].text = "$" + item.price;
             go.GetComponentInChildren<Button> ().onClick.AddListener (() => { TryBuy (item.name); });
             _items.Add (item, go);
@@ -64,7 +64,11 @@ namespace Shops {
             _items.Remove (item);
         }
 
-        public void TryBuy (string item) { RequestManagerClient.instance.SendRequest ("trybuy", item); }
+        public void TryBuy (string item) {
+            if (HUD.instance.money >= ShopManager.items.First (i => i.name == item).price) {
+                RequestManagerClient.instance.SendRequest ("trybuy", item);
+            }
+        }
 
         private void Buy (string item) {
             HUD.instance.OnMoneyChanged (HUD.instance.money - ShopManager.items.First (i => i.name == item).price);

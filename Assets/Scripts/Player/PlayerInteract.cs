@@ -2,6 +2,7 @@
 using Minigames;
 using Mirror;
 using UnityEngine;
+using Minigames.Labyrinth.Maze;
 
 //TODO: alles temporär
 namespace Player {
@@ -24,8 +25,7 @@ namespace Player {
                 }
 
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer ("TempLeaveGame")) {
-                    NetworkClient.Send (new LeaveMinigameMessage
-                        { username = GameManager.instance.username, gameID = "(27.0, 0.0, 7.0)Labyrinth" });
+                    GameManager.instance.LeaveMinigame();
                 }
             }
         }

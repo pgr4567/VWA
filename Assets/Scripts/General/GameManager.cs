@@ -5,6 +5,7 @@ using Chat;
 using Minigames;
 using Mirror;
 using Networking;
+using Networking.RequestMessages;
 using Player;
 using UI;
 using UnityEngine;
@@ -12,16 +13,20 @@ using UnityEngine;
 namespace General {
     public class GameManager : NetworkBehaviour {
         public static GameManager instance;
+        public bool DEBUG;
         [HideInInspector] public bool isInGUI;
         [HideInInspector] public new bool isServer;
         [SerializeField] private GameObject lobbyCanvas;
         [SerializeField] private GameObject finishGameCanvas;
         [SerializeField] private Transform worldSpawnTransform;
+        public string currentGame { get; private set; } = "";
         public Action onMinigameListUpdate;
         public string username { get; private set; }
         public string sessionToken { get; private set; }
         public string[] minigameIDs { get; private set; }
         public bool isInGame;
+        public int currentTeam = -1;
+        public GameObject player;
 
         public Vector3 worldSpawn {
             get { return worldSpawnTransform.position; }
@@ -38,7 +43,7 @@ namespace General {
 
         private void Start () {
             if (!NetworkServer.active) {
-                username     = PlayerPrefs.GetString ("username");
+                username = PlayerPrefs.GetString ("username");
                 sessionToken = PlayerPrefs.GetString ("sessionToken");
                 return;
             }
@@ -46,26 +51,31 @@ namespace General {
             isServer = true;
             GameObject go = new GameObject { name = "Overview Camera" };
             go.AddComponent<Camera> ();
-            go.transform.position    = new Vector3 (0, 20, 0);
+            go.transform.position = new Vector3 (0, 20, 0);
             go.transform.eulerAngles = new Vector3 (90, 0, 0);
 
             Cursor.lockState = CursorLockMode.None;
-
-            SetupServerListeners ();
-        }
-
-        private void SetupServerListeners () {
-            NetworkServer.RegisterHandler<ChatMessage> (msg => {
-                foreach (KeyValuePair<string, GameObject> val in MainNetworkManager.instance.playerObjs.Where (val =>
-                    val.Key != msg.sender)) {
-                    NetworkServer.SendToClientOfPlayer (val.Value.GetComponent<NetworkIdentity> (), msg);
-                }
-            });
         }
 
         public void UpdateMinigameList (string[] gameIDs) {
             minigameIDs = gameIDs;
             onMinigameListUpdate?.Invoke ();
+        }
+
+        public void JoinMinigame (string gameID) {
+            if (isServer || currentGame != "") {
+                return;
+            }
+            NetworkClient.Send (
+                new JoinMinigameMessage { username = username, gameID = gameID });
+            currentGame = gameID;
+        }
+        public void LeaveMinigame () {
+            if (isServer || currentGame == "") {
+                return;
+            }
+            NetworkClient.Send (new LeaveMinigameMessage { username = username, gameID = currentGame });
+            currentGame = "";
         }
 
         [TargetRpc]
@@ -105,6 +115,33 @@ namespace General {
         [TargetRpc]
         public void TargetSetInGame (NetworkConnection target, bool inGame) {
             isInGame = inGame;
+        }
+
+        [TargetRpc]
+        public void TargetSetGameID (NetworkConnection target, string gameID) {
+            currentGame = gameID;
+        }
+
+        [TargetRpc]
+        public void TargetSetCurrentTeam (NetworkConnection target, int team) {
+            currentTeam = team;
+        }
+
+        [TargetRpc]
+        public void TargetChangePlayerSpeed (NetworkConnection target, float moveSpeed, float lookSpeed) {
+            player.GetComponent<PlayerMovement> ().movementSpeed = moveSpeed;
+            player.GetComponent<CameraLook> ().lookSpeed = lookSpeed;
+        }
+
+        [TargetRpc]
+        public void TargetResetPlayerSpeed (NetworkConnection target) {
+            player.GetComponent<PlayerMovement> ().movementSpeed = PlayerMovement.standardMovementSpeed;
+            player.GetComponent<CameraLook> ().lookSpeed = CameraLook.standardLookSpeed;
+        }
+
+        [TargetRpc]
+        public void TargetUpdateMoney (NetworkConnection target) {
+            RequestManagerClient.instance.SendRequest ("money");
         }
     }
 }

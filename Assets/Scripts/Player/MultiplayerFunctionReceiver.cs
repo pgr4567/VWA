@@ -10,6 +10,7 @@ namespace Player {
     public class MultiplayerFunctionReceiver : NetworkBehaviour {
         private void Start () {
             if (isLocalPlayer) {
+                GameManager.instance.player = gameObject;
                 RegisterEventHandlers ();
             }
         }
@@ -24,6 +25,9 @@ namespace Player {
             });
             NetworkClient.RegisterHandler<StartMinigameMessage> (msg => {
                 MinigameDispatcher.instance.GetMinigameManagerForGame (msg.gameID)?.StartGameClient ();
+            });
+            NetworkClient.RegisterHandler<PrepareMinigameMessage> (msg => {
+                MinigameDispatcher.instance.GetMinigameManagerForGame (msg.gameID)?.PrepareGameClient (msg);
             });
             NetworkClient.RegisterHandler<MinigameListUpdateMessage> (msg => {
                 GameManager.instance.UpdateMinigameList (msg.gameIDs);

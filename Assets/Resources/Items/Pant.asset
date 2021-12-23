@@ -16,3 +16,4 @@ MonoBehaviour:
   sprite: {fileID: 0}
   price: 100
   sellable: 0
+  category: 2

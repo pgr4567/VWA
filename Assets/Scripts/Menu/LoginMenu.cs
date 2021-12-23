@@ -14,8 +14,10 @@ namespace Menu {
         private bool _starting;
 
         private void Start () {
-            _networkManager  = MainNetworkManager.instance;
+            _networkManager = MainNetworkManager.instance;
             Cursor.lockState = CursorLockMode.None;
+
+            // StartServer();
         }
 
         private void OnEnable () { LoadCredentials (); }
@@ -32,8 +34,8 @@ namespace Menu {
         }
 
         private void LoadCredentials () {
-            username.text       = PlayerPrefs.GetString ("username");
-            password.text       = PlayerPrefs.GetString ("password");
+            username.text = PlayerPrefs.GetString ("username");
+            password.text = PlayerPrefs.GetString ("password");
             passwordToggle.isOn = PlayerPrefs.GetInt ("passwordToggle") == 1;
         }
 
@@ -44,7 +46,11 @@ namespace Menu {
                 return;
             }
             if (!VersionChecker.instance.hasCheckedVersion) {
-                Debug.Log ("VersionChecker has not yet run");
+                VersionChecker.instance.ShowVersionCheckerNotYetRunScreen ();
+                return;
+            }
+            if (!VersionChecker.instance.isCorrectVersion) {
+                VersionChecker.instance.ShowInvalidVersionScreen ();
                 return;
             }
 

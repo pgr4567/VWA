@@ -20,6 +20,21 @@ namespace Minigames {
         protected bool isRunning;
         protected string lobbyOwner = string.Empty;
         protected List<string> players = new List<string> ();
+        private List<string> readiedPlayers = new List<string> ();
+        private bool serverReady = false;
+        protected bool ServerReady {
+            get {
+                return serverReady;
+            }
+            set {
+                serverReady = value;
+                if (ready) {
+                    StartGameServer ();
+                    NetworkServer.SendToAll (new StartMinigameMessage () { gameID = gameID });
+                }
+            }
+        }
+        private bool ready => players.Count == readiedPlayers.Count && ServerReady;
         protected Dictionary<int, MinigameTeam> teams = new Dictionary<int, MinigameTeam> ();
 
         protected void Update () {
@@ -43,7 +58,7 @@ namespace Minigames {
 
             bool addedToTeam = false;
             foreach (MinigameTeam team in teams.Values.Where (team =>
-                team.players.Count < minigame.requiredPlayersPerTeam)) {
+                    team.players.Count < minigame.requiredPlayersPerTeam)) {
                 team.players.Add (username);
                 addedToTeam = true;
                 break;
@@ -51,7 +66,7 @@ namespace Minigames {
 
             if (!addedToTeam) {
                 foreach (MinigameTeam team in teams.Values.Where (team =>
-                    team.players.Count < minigame.maxPlayersPerTeam)) {
+                        team.players.Count < minigame.maxPlayersPerTeam)) {
                     team.players.Add (username);
                     addedToTeam = true;
                     break;
@@ -66,7 +81,7 @@ namespace Minigames {
                     }
 
                     foreach (MinigameTeam team in teams.Values.Where (team =>
-                        team.players.Count < minigame.requiredPlayersPerTeam)) {
+                            team.players.Count < minigame.requiredPlayersPerTeam)) {
                         team.players.Add (username);
                         addedToTeam = true;
                         break;
@@ -84,12 +99,13 @@ namespace Minigames {
                 lobbyOwner = username;
             }
 
-            MainNetworkManager.instance.players[username].Send (new MirrorMinigameMessage
-                { name = minigame.name, number = number });
+            MainNetworkManager.instance.players[username].Send (new MirrorMinigameMessage { name = minigame.name, number = number });
             MainNetworkManager.instance.players[username].Send (new FreezeMovementMessage { freeze = true });
             GameManager.instance.TargetShowLobbyCanvas (MainNetworkManager.instance.players[username], minigame,
                 teams[Colors.colors[0]], teams[Colors.colors[1]], isOwner, gameID);
             GameManager.instance.TargetSetInGame (MainNetworkManager.instance.players[username], true);
+            GameManager.instance.TargetSetGameID (MainNetworkManager.instance.players[username], gameID);
+            GameManager.instance.TargetSetCurrentTeam (MainNetworkManager.instance.players[username], GetTeamOfPlayer (username));
             foreach (string uName in players) {
                 GameManager.instance.TargetUpdateTeams (MainNetworkManager.instance.players[uName],
                     teams[Colors.colors[0]], teams[Colors.colors[1]]);
@@ -100,7 +116,7 @@ namespace Minigames {
             if (players.Count - 1 < minigame.requiredPlayersPerTeam * minigame.requiredTeams && isRunning ||
                 players.Count - 1 == 0 && !isRunning) {
                 Debug.Log ("Player: " + username +
-                           " left the minigame. There are now too few players. Closing minigame.");
+                    " left the minigame. There are now too few players. Closing minigame.");
                 MinigameDispatcher.instance.RemoveMinigameLobby (minigame.name, number, gameID);
             } else {
                 players.Remove (username);
@@ -127,16 +143,21 @@ namespace Minigames {
         public virtual async void StartGameServer () {
             //TODO: REMOVE -1 LOL
             if (!isRunning && players.Count >= minigame.requiredPlayersPerTeam * minigame.requiredTeams - 1) {
+                teamSpawnPositions.ForEach (t => _unusedTeamSpawnPositions.Enqueue (t));
+                foreach (MinigameTeam team in teams.Values) {
+                    team.spawnPoint = _unusedTeamSpawnPositions.Dequeue ().position;
+                }
+
                 isRunning = true;
                 foreach (MinigameTeam team in teams.Values)
-                foreach (string pName in team.players) {
-                    //MainNetworkManager.instance.playerObjs[pName].GetComponent<PlayerMovement> ().RpcSetVisible (false);
-                    GameObject player = MainNetworkManager.instance.playerObjs[pName];
-                    player.GetComponent<NetworkTransform> ().ServerTeleport (team.spawnPoint);
-                    await Task.Delay (100);
-                    MainNetworkManager.instance.players[pName].Send (new FreezeMovementMessage { freeze = false });
-                    GameManager.instance.TargetHideLobbyCanvas (MainNetworkManager.instance.players[pName]);
-                }
+                    foreach (string pName in team.players) {
+                        //MainNetworkManager.instance.playerObjs[pName].GetComponent<PlayerMovement> ().RpcSetVisible (false);
+                        GameObject player = MainNetworkManager.instance.playerObjs[pName];
+                        player.GetComponent<NetworkTransform> ().ServerTeleport (team.spawnPoint);
+                        await Task.Delay (100);
+                        MainNetworkManager.instance.players[pName].Send (new FreezeMovementMessage { freeze = false });
+                        GameManager.instance.TargetHideLobbyCanvas (MainNetworkManager.instance.players[pName]);
+                    }
             } else {
                 Debug.LogWarning ("either not enough players or already running. Cannot Start Minigame");
                 //TODO: Error
@@ -162,11 +183,9 @@ namespace Minigames {
             teams.Clear ();
             isRunning = false;
 
-            teamSpawnPositions.ForEach (t => _unusedTeamSpawnPositions.Enqueue (t));
-
             for (int i = 0; i < minigame.requiredTeams; i++) {
                 foreach (int c in Colors.colors.Where (c => !teams.ContainsKey (c))) {
-                    teams.Add (c, new MinigameTeam { spawnPoint = _unusedTeamSpawnPositions.Dequeue ().position });
+                    teams.Add (c, new MinigameTeam ());
                     break;
                 }
             }
@@ -181,7 +200,7 @@ namespace Minigames {
 
         private void LeavePlayerInternal (PlayerMovement player, string username) {
             GameManager.instance.TargetSetInGame (MainNetworkManager.instance.players[username], false);
-            Debug.Log (MainNetworkManager.instance.playerObjs[username]);
+            GameManager.instance.TargetSetCurrentTeam (MainNetworkManager.instance.players[username], -1);
             player.RpcSetVisible (true);
             MainNetworkManager.instance.players[username].Send (new FreezeMovementMessage { freeze = false });
             GameManager.instance.TargetHideLobbyCanvas (MainNetworkManager.instance.players[username]);
@@ -194,6 +213,17 @@ namespace Minigames {
             foreach (string player in players) {
                 GameManager.instance.TargetShowFinishGameCanvas (MainNetworkManager.instance.players[player], minigame,
                     teamWon);
+                GameManager.instance.TargetUpdateMoney (MainNetworkManager.instance.players[player]);
+            }
+        }
+
+        public void ReadyUpPlayer (string username) {
+            if (!readiedPlayers.Contains (username) && !ready) {
+                readiedPlayers.Add (username);
+                if (ready) {
+                    StartGameServer ();
+                    NetworkServer.SendToAll (new StartMinigameMessage () { gameID = gameID });
+                }
             }
         }
 
@@ -204,9 +234,21 @@ namespace Minigames {
         }
 
         protected void FinishGame (MinigameTeam teamWon) {
+            foreach (string username in players) {
+                GameManager.instance.TargetResetPlayerSpeed (MainNetworkManager.instance.players[username]);
+            }
             isRunning = false;
             ShowEndScreen (teamWon);
             MinigameDispatcher.instance.RemoveMinigameLobby (minigame.name, number, gameID);
+        }
+
+        protected int GetTeamOfPlayer (string username) {
+            return teams.First (t => t.Value.players.Contains (username)).Key;
+        }
+
+        public abstract void PrepareGameServer ();
+        public virtual void PrepareGameClient (PrepareMinigameMessage msg) {
+            NetworkClient.Send (new ReadyUpMessage () { username = GameManager.instance.username, gameID = gameID });
         }
 
         protected abstract void GameLoopServer ();

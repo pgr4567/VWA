@@ -33,7 +33,7 @@ namespace Menu {
                 return;
             }
 
-            string response = Helpers.Get ("http://www.vwaspiel.de:3000/register?username=" + username.text + "&password=" +
+            string response = Helpers.Get ("http://www.vwaspiel.de:3001/register?username=" + username.text + "&password=" +
                                            password.text);
             switch (response) {
                 case ServerResponses.Success:

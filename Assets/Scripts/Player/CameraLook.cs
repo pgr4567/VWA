@@ -5,15 +5,17 @@ using UnityEngine;
 namespace Player {
     public class CameraLook : NetworkBehaviour {
         [SerializeField] private float maxXRotation = 80f;
-        [SerializeField] private float lookSpeed = 10f;
+        public float lookSpeed = 5f;
         [SerializeField] private GameObject cameraPrefab;
 
         private Transform _camera;
         private Vector3 _rotation = Vector3.zero;
 
+        public static float standardLookSpeed = 5f;
+
         private void Start () {
             if (isLocalPlayer) {
-                _camera = Instantiate (cameraPrefab, new Vector3 (0, 1.5f, 0), Quaternion.identity, transform)
+                _camera = Instantiate (cameraPrefab, new Vector3 (0, 1f, 0), Quaternion.identity, transform)
                     .transform;
                 gameObject.name = "LocalPlayer";
             } else {

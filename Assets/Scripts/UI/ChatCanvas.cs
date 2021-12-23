@@ -60,6 +60,9 @@ namespace UI {
         }
 
         public void AppendMessage (ChatMessage msg) {
+            if (msg.message.Trim() == "") {
+                return;
+            }
             GameObject go = Instantiate (messagePrefab, messageParent);
             go.GetComponent<TMP_Text> ().text = "<" + msg.sender + ">: " + msg.message;
             _messages.Enqueue (msg);

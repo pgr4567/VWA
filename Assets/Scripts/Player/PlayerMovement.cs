@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Player {
     public class PlayerMovement : NetworkBehaviour {
         [SerializeField] private CharacterController controller;
-        [SerializeField] private float movementSpeed = 10f;
+        public float movementSpeed = 10f;
         [SerializeField] private float gravity = -9.81f;
         [SerializeField] private Transform groundCheckSphere;
         [SerializeField] private float maxGroundDistance = 0.1f;
@@ -16,6 +16,8 @@ namespace Player {
         private Vector2 _input = Vector2.zero;
         private bool _isGrounded = true;
         private Vector3 _velocity = Vector3.zero;
+
+        public static float standardMovementSpeed = 10f;
 
         private void Update () {
             if (!isLocalPlayer || GameManager.instance.isInGUI) {

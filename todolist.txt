@@ -7,48 +7,53 @@
 [x] Session Tokens
 [x] Make Option to disable Password Saving
 [x] Register Menu
-[ ] Re-Try Login if failed, after n times return to main menu
-[ ] Result Screen for Login
 [x] Change Player Settings->Stacktrace back to <Script Only>
-[ ] Pant and Melonhouse Easter Egg
 [x] FinishGameCanvas
-[ ] Additional Info in FinishGameCanvas
 [x] delete "" user and "" password
-[ ] why is cursor locked when in FinishGameCanvas?
 [x] prevent "" user and "" password, maybe add minimum length
-[ ] move backend server back to backend
 [x] chat
 [x] HUD with money
 [x] shop
 [x] get money
-[ ] items
 [x] forbid joining with an old version
-[ ] show versionchecker has not yet run screen
 [x] make playing players invisible for others
-[ ] stats page on domain public server
-[ ] show session invalidated screen
 [x] move everything except login, register and version to another server -> backend
-[ ] player ranks and permissions
-[ ] commands and console
-[ ] Biome
-[ ] procedurally generate
-[ ] snowman
-[ ] friend system
-[ ] invites
-[x] convert error strings to variables
-[ ] reload items
-[ ] new input system
+[x] make snowman rotation work
 [x] settings system
-[ ] expand settings screen
-[ ] make settings accessible frmo anywhere
-[ ] key rebinding
-[ ] mobile optimize
-[ ] modeln
-[ ] party chat
-[ ] private message system
 [x] fix jumping
 [x] fix minigames are no longer working -> SetRpcVisible
 [x] add colliders to players again!
 [x] fix goal not registering collision -> collision only registering on clients
-[ ] kreuzprodukt
-[ ] todo -> add settings menu
+[x] kreuzprodukt
+[x] todo -> add settings menu
+[x] friend system
+[x] convert error strings to variables
+[x] invites
+[x] shop bug adds the same item continously
+[x] show versionchecker has not yet run screen
+[x] procedurally generate
+[x] commands and console
+[x] player ranks and permissions
+[x] private message system
+[ ] why ain't game working on dan and jan
+[ ] why is cursor locked when in FinishGameCanvas?
+[ ] Pant and Melonhouse Easter Egg
+[ ] move backend server back to backend
+[ ] Additional Info in FinishGameCanvas
+[ ] Re-Try Login if failed, after n times return to main menu
+[ ] Result Screen for Login
+[ ] items
+[ ] stats page on data server
+[ ] show session invalidated screen
+[ ] Biome
+[ ] snowman
+[ ] reload items
+[ ] new input system
+[ ] expand settings screen
+[ ] make settings accessible from anywhere
+[ ] key rebinding
+[ ] mobile optimize
+[ ] modeln
+[ ] party chat
+[ ] add "motd"
+[ ] make other servers and let players join

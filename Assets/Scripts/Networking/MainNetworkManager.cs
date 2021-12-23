@@ -4,6 +4,7 @@ using Minigames;
 using Mirror;
 using Networking.RequestMessages;
 using UnityEngine;
+using General;
 
 namespace Networking {
     public class MainNetworkManager : NetworkManager {
@@ -71,8 +72,7 @@ namespace Networking {
 
         public override void OnClientDisconnect (NetworkConnection conn) {
             //TODO: TEMPORARY
-            NetworkClient.Send (new LeaveMinigameMessage
-                { username = PlayerPrefs.GetString ("username"), gameID = "(27.0, 0.0, 7.0)Labyrinth" });
+            GameManager.instance.LeaveMinigame();
 
             base.OnClientDisconnect (conn);
         }

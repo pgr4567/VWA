@@ -38,6 +38,33 @@ namespace Networking.RequestMessages {
                     case "trybuy":
                         response = TryBuy (msg.username, msg.args, out status);
                         break;
+                    case "removeFriend":
+                        response = RemoveFriend (msg.username, msg.args, out status);
+                        break;
+                    case "inviteFriend":
+                        response = InviteFriend (msg.username, msg.args, out status);
+                        break;
+                    case "acceptRequest":
+                        response = AcceptFriendRequest (msg.username, msg.args, out status);
+                        break;
+                    case "declineRequest":
+                        response = DeclineFriendRequest (msg.username, msg.args, out status);
+                        break;
+                    case "removeRequest":
+                        response = RemoveRequest (msg.username, msg.args, out status);
+                        break;
+                    case "friends":
+                        response = GetFriends (msg.username, msg.args, out status);
+                        break;
+                    case "requests":
+                        response = GetRequests (msg.username, msg.args, out status);
+                        break;
+                    case "sentRequests":
+                        response = GetSentRequests (msg.username, msg.args, out status);
+                        break;
+                    case "addRequest":
+                        response = AddRequest(msg.username, msg.args, out status);
+                        break;
                     default:
                         response = "";
                         status   = ResponseResourceStatus.NOT_FOUND;
@@ -48,7 +75,145 @@ namespace Networking.RequestMessages {
             });
         }
 
-        private string GetMoney (string username, out ResponseResourceStatus status) {
+        private string RemoveFriend (string username, string[] args, out ResponseResourceStatus status) {
+            string response = Helpers.Get ("http://vwaspiel.de:3001/removeFriend?username=" + username + "&friend=" + args[0]);
+            
+            switch (response) {
+                case ServerResponses.UnexpectedError:
+                    status = ResponseResourceStatus.ERROR;
+                    break;
+                case ServerResponses.UsernameNotExist:
+                    status = ResponseResourceStatus.FORBIDDEN;
+                    break;
+                default:
+                    status = ResponseResourceStatus.SUCCESS;
+                    break;
+            }
+            
+            SendbackResponse(args[0], ServerResponses.Success, "notifyRemove", new [] { username }, ResponseResourceStatus.SUCCESS, 0);
+            return response;
+        }
+        
+        private string InviteFriend (string username, string[] args, out ResponseResourceStatus status) {
+            SendbackResponse(args[0], ServerResponses.Success, "notifyInvite", new [] {username, args[1]}, ResponseResourceStatus.SUCCESS, 0);
+            status = ResponseResourceStatus.SUCCESS;
+            return ServerResponses.Success;
+        }
+
+        private string GetFriends (string username, string[] args, out ResponseResourceStatus status) {
+            string response = Helpers.Get ("http://vwaspiel.de:3001/getFriends?username=" + username);
+
+            switch (response) {
+                case ServerResponses.UnexpectedError:
+                    status = ResponseResourceStatus.ERROR;
+                    break;
+                case ServerResponses.UsernameNotExist:
+                    status = ResponseResourceStatus.FORBIDDEN;
+                    break;
+                default:
+                    status = ResponseResourceStatus.SUCCESS;
+                    break;
+            }
+            
+            return response;
+        }
+        private string GetRequests (string username, string[] args, out ResponseResourceStatus status) {
+            string response = Helpers.Get ("http://vwaspiel.de:3001/getFriendRequests?username=" + username);
+
+            switch (response) {
+                case ServerResponses.UnexpectedError:
+                    status = ResponseResourceStatus.ERROR;
+                    break;
+                case ServerResponses.UsernameNotExist:
+                    status = ResponseResourceStatus.FORBIDDEN;
+                    break;
+                default:
+                    status = ResponseResourceStatus.SUCCESS;
+                    break;
+            }
+            
+            return response;
+        }
+        private string GetSentRequests (string username, string[] args, out ResponseResourceStatus status) {
+            string response = Helpers.Get ("http://vwaspiel.de:3001/getSentFriendRequests?username=" + username);
+
+            switch (response) {
+                case ServerResponses.UnexpectedError:
+                    status = ResponseResourceStatus.ERROR;
+                    break;
+                case ServerResponses.UsernameNotExist:
+                    status = ResponseResourceStatus.FORBIDDEN;
+                    break;
+                default:
+                    status = ResponseResourceStatus.SUCCESS;
+                    break;
+            }
+            
+            return response;
+        }
+        private string AddRequest (string username, string[] args, out ResponseResourceStatus status) {
+            string response = Helpers.Get ("http://vwaspiel.de:3001/addFriendRequest?username=" + username + "&friend=" + args[0]);
+            
+            status = GetStatusSimple(response);
+            SendbackResponse(args[0], ServerResponses.Success, "notifyRequest", new [] {username}, ResponseResourceStatus.SUCCESS, 0);
+            return response;
+        }
+        
+        private string AcceptFriendRequest (string username, string[] args, out ResponseResourceStatus status) {
+            string response = Helpers.Get ("http://vwaspiel.de:3001/acceptFriendRequest?username=" + username + "&friend=" + args[0]);
+            
+            switch (response) {
+                case ServerResponses.UnexpectedError:
+                    status = ResponseResourceStatus.ERROR;
+                    break;
+                case ServerResponses.UsernameNotExist:
+                    status = ResponseResourceStatus.FORBIDDEN;
+                    break;
+                default:
+                    status = ResponseResourceStatus.SUCCESS;
+                    break;
+            }
+            SendbackResponse(args[0], ServerResponses.Success, "notifyAccept", new [] {username}, ResponseResourceStatus.SUCCESS, 0);
+            return response;
+        }
+        
+        private string DeclineFriendRequest (string username, string[] args, out ResponseResourceStatus status) {
+            string response = Helpers.Get ("http://vwaspiel.de:3001/declineFriendRequest?username=" + username + "&friend=" + args[0]);
+            
+            switch (response) {
+                case ServerResponses.UnexpectedError:
+                    status = ResponseResourceStatus.ERROR;
+                    break;
+                case ServerResponses.UsernameNotExist:
+                    status = ResponseResourceStatus.FORBIDDEN;
+                    break;
+                default:
+                    status = ResponseResourceStatus.SUCCESS;
+                    break;
+            }
+            SendbackResponse(args[0], ServerResponses.Success, "notifyDecline", new [] {username}, ResponseResourceStatus.SUCCESS, 0);
+            return response;
+        }
+        
+        private string RemoveRequest (string username, string[] args, out ResponseResourceStatus status) {
+            string response = Helpers.Get ("http://vwaspiel.de:3001/removeFriendRequest?username=" + username + "&friend=" + args[0]);
+            
+            switch (response) {
+                case ServerResponses.UnexpectedError:
+                    status = ResponseResourceStatus.ERROR;
+                    break;
+                case ServerResponses.UsernameNotExist:
+                    status = ResponseResourceStatus.FORBIDDEN;
+                    break;
+                default:
+                    status = ResponseResourceStatus.SUCCESS;
+                    break;
+            }
+            SendbackResponse(args[0], ServerResponses.Success, "notifyRequestRemove", new [] {username}, ResponseResourceStatus.SUCCESS, 0);
+            return response;
+        }
+
+        public string GetMoney (string username, out ResponseResourceStatus status) {
             string response = Helpers.Get ("http://vwaspiel.de:3001/getMoney?username=" + username);
             switch (response) {
                 case ServerResponses.UnexpectedError:
@@ -109,9 +274,12 @@ namespace Networking.RequestMessages {
                     : ResponseResourceStatus.FORBIDDEN;
         }
 
-        private void SendbackResponse (string username, string response, string request, string[] args,
+        public void SendbackResponse (string username, string response, string request, string[] args,
             ResponseResourceStatus status,
             int tryNumber) {
+            if (!MainNetworkManager.instance.players.ContainsKey(username)) {
+                return;
+            }
             MainNetworkManager.instance.players[username].Send (new RequestResourceMessage {
                 responseStatus = status, response = response, request = request, args = args, tryNumber = tryNumber
             });

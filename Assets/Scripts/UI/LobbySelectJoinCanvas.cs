@@ -26,8 +26,7 @@ namespace UI {
                 return;
             }
 
-            NetworkClient.Send (
-                new JoinMinigameMessage { username = GameManager.instance.username, gameID = gameID });
+            GameManager.instance.JoinMinigame(gameID);
         }
 
         public void UpdateMinigameList () {

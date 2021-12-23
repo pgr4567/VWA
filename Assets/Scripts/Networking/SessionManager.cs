@@ -1,12 +1,11 @@
 ﻿using System;
 using Networking.RequestMessages;
-using UnityEngine;
 
 namespace Networking {
     public static class SessionManager {
         private static readonly int maxSessionTime;
         static SessionManager () {
-            maxSessionTime = int.Parse (Helpers.Get ("http://vwaspiel.de:3001/maxSessionTime").Substring (1));
+            maxSessionTime = int.Parse (Helpers.Get ("http://vwaspiel.de:3000/maxSessionTime").Substring (1));
         }
         
         public static string GetSessionToken (string username) {

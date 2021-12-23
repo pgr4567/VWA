@@ -42,7 +42,7 @@ namespace Networking {
 
         public void OnAuthRequestMessage (NetworkConnection conn, AuthRequestMessage msg) {
             string loginResponse =
-                Helpers.Get ("http://www.vwaspiel.de:3000/login?username=" + msg.username + "&password=" + msg.password);
+                Helpers.Get ("http://www.vwaspiel.de:3001/login?username=" + msg.username + "&password=" + msg.password);
             if (loginResponse == ServerResponses.Success) {
                 string generateSessionTokenResponse = SessionManager.GenerateSessionID (msg.username);
                 if (generateSessionTokenResponse == ServerResponses.Success) {

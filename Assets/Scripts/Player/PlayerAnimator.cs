@@ -7,27 +7,15 @@ namespace Player {
         private Vector3 _lastPos = Vector3.zero;
 
         private void Update () {
-            Vector3 position = transform.position;
-            Animate (position - _lastPos);
-            _lastPos = position;
+            Vector3 position = transform.localPosition;
+            if ((position - _lastPos).magnitude > 0.1f) {
+                Animate (position - _lastPos);
+                _lastPos = position;
+            }
         }
 
         private void Animate (Vector3 direction) {
-            Vector3 angles = walkingBall.localEulerAngles;
-            angles += new Vector3 (direction.z, 0, direction.x) * animationSpeed * Time.deltaTime * 1000;
-            if (angles.x > 36000f) {
-                angles.x -= 36000f;
-            }
-
-            if (angles.y > 36000f) {
-                angles.y -= 36000f;
-            }
-
-            if (angles.z > 36000f) {
-                angles.z -= 36000f;
-            }
-
-            walkingBall.transform.localEulerAngles = angles;
+            walkingBall.Rotate (Vector3.Cross (Vector3.up, direction).normalized * animationSpeed * Time.deltaTime * 100, Space.World);
         }
     }
 }

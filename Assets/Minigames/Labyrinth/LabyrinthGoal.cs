@@ -2,7 +2,7 @@
 
 namespace Minigames.Labyrinth {
     public class LabyrinthGoal : MonoBehaviour {
-        [SerializeField] private LabyrinthManager manager;
+        public LabyrinthManager manager;
         [SerializeField] private int teamNumber = -1;
 
         public void OnTriggerEnter (Collider coll) {

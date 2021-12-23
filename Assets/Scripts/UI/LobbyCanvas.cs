@@ -74,8 +74,7 @@ namespace UI {
 
         public void LeaveLobby () {
             MouseController.instance.HideCursor ();
-            NetworkClient.Send (new LeaveMinigameMessage
-                { username = GameManager.instance.username, gameID = _gameID });
+            GameManager.instance.LeaveMinigame();
             gameObject.SetActive (false);
         }
     }

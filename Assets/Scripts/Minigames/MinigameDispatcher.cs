@@ -10,7 +10,7 @@ namespace Minigames {
         public static MinigameDispatcher instance;
         [SerializeField] private List<Minigame> minigames = new List<Minigame> ();
         [SerializeField] private Transform minigameStartPosition;
-        [SerializeField] private int worldSpacer = 2;
+        [SerializeField] private int worldSpacer = 10;
 
         private readonly Dictionary<string, MinigameManager>
             _existingGames = new Dictionary<string, MinigameManager> ();
@@ -126,11 +126,15 @@ namespace Minigames {
             NetworkServer.RegisterHandler<StartMinigameMessage> (StartMinigame);
             NetworkServer.RegisterHandler<JoinMinigameMessage> (JoinMinigame);
             NetworkServer.RegisterHandler<LeaveMinigameMessage> (LeaveMinigame);
+            NetworkServer.RegisterHandler<ReadyUpMessage> (ReadyUp);
+        }
+
+        private void ReadyUp (ReadyUpMessage msg) {
+            GetMinigameManagerForGame (msg.gameID).ReadyUpPlayer(msg.username);
         }
 
         private void StartMinigame (StartMinigameMessage msg) {
-            GetMinigameManagerForGame (msg.gameID).StartGameServer ();
-            NetworkServer.SendToAll (msg);
+            GetMinigameManagerForGame (msg.gameID).PrepareGameServer();
         }
 
         private void JoinMinigame (JoinMinigameMessage msg) { JoinMinigameLobby (msg.username, msg.gameID); }
